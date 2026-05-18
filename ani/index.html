@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Anime Vault, tu biblioteca personal para guardar anime, temporadas, episodios y portadas en un archivo local."
+      content="Anime Vault te ayuda a guardar tus animes, ver tu progreso y tenerlo todo ordenado en un solo sitio."
     />
     <title>Anime Vault</title>
     <link rel="stylesheet" href="style.css" />
@@ -18,35 +18,35 @@
     <div class="app-shell">
       <aside class="sidebar panel">
         <div class="brand">
-          <span class="eyebrow">Anime tracker personal</span>
+          <span class="eyebrow">Tu lista de anime</span>
           <h1>Anime Vault</h1>
           <p class="brand-copy">
-            Una biblioteca viva para guardar lo que ves, con portadas, progreso y notas.
+            Guarda los animes que sigues, apunta por dónde vas y añade tus notas en un solo lugar.
           </p>
         </div>
 
         <nav class="side-nav" aria-label="Secciones">
-          <a class="nav-link" href="#overview" data-route="overview">Resumen</a>
-          <a class="nav-link" href="#library" data-route="library">Biblioteca</a>
-          <a class="nav-link" href="#editor" data-route="editor">Editor</a>
-          <a class="nav-link" href="#detail" data-route="detail">Detalle</a>
+          <a class="nav-link" href="#overview" data-route="overview">Inicio</a>
+          <a class="nav-link" href="#library" data-route="library">Mis animes</a>
+          <a class="nav-link" href="#editor" data-route="editor">Añadir anime</a>
+          <a class="nav-link" href="#detail" data-route="detail">Ficha</a>
         </nav>
 
         <div class="sidebar-card">
-          <span class="sidebar-label">Guardado local</span>
+          <span class="sidebar-label">Tus datos</span>
           <strong>data/animes.json</strong>
-          <p>Todo se escribe en archivo para que puedas editarlo y mantenerlo siempre a mano.</p>
+          <p>Cuando uses la versión local, tus animes se guardan en un archivo para que no se pierdan.</p>
         </div>
 
         <div class="sidebar-card sidebar-current">
-          <span class="sidebar-label">Seleccion actual</span>
+          <span class="sidebar-label">Anime seleccionado</span>
           <strong id="sidebarCurrentTitle">Sin anime</strong>
-          <p id="sidebarCurrentMeta">Abre una ficha para fijarla aqui.</p>
-          <button class="secondary-btn" type="button" id="sidebarDetailBtn">Abrir detalle</button>
+          <p id="sidebarCurrentMeta">Abre una ficha para verla aquí.</p>
+          <button class="secondary-btn" type="button" id="sidebarDetailBtn">Ver ficha</button>
         </div>
 
         <div class="sidebar-actions">
-          <button class="primary-btn" type="button" id="openEditorBtn">Nuevo anime</button>
+          <button class="primary-btn" type="button" id="openEditorBtn">Añadir anime</button>
         </div>
       </aside>
 
@@ -54,36 +54,36 @@
         <section class="view" data-view="overview">
           <header class="hero panel">
             <div class="hero-copy">
-              <span class="eyebrow">Dashboard anime</span>
-              <h2>Tu seguimiento, pero con estilo.</h2>
+              <span class="eyebrow">Empieza aquí</span>
+              <h2>Todo tu anime, claro y ordenado.</h2>
               <p class="lead">
-                Salta entre vistas, mira tus portadas, edita tu progreso y guarda cada cambio en
-                el archivo local sin depender del navegador.
+                Consulta tu lista, revisa en qué episodio vas y añade o cambia información cuando
+                quieras. Todo queda guardado para que lo tengas siempre a mano.
               </p>
 
               <div class="status-strip">
-                <span class="status-chip accent">Guardado en archivo</span>
-                <span class="status-chip">Sidebar + vistas</span>
-                <span class="status-chip">Portadas por URL</span>
+                <span class="status-chip accent">Tus datos guardados</span>
+                <span class="status-chip">Vista rápida</span>
+                <span class="status-chip">Portadas por enlace</span>
               </div>
 
               <div class="hero-actions">
-                <a class="primary-btn" href="#library">Ir a biblioteca</a>
-                <a class="secondary-btn" href="#editor">Crear anime</a>
+                <a class="primary-btn" href="#library">Ver mis animes</a>
+                <a class="secondary-btn" href="#editor">Añadir anime</a>
               </div>
             </div>
 
             <section class="stats-grid">
               <article class="stat-card stat-card-main">
-                <span>Total</span>
+                <span>Total de animes</span>
                 <strong id="animeCount">0</strong>
               </article>
               <article class="stat-card">
-                <span>Viendo</span>
+                <span>Ahora mismo viendo</span>
                 <strong id="watchingCount">0</strong>
               </article>
               <article class="stat-card">
-                <span>Completados</span>
+                <span>Terminados</span>
                 <strong id="completedCount">0</strong>
               </article>
               <article class="stat-card">
@@ -97,26 +97,27 @@
             <article class="panel section-card">
               <div class="section-head">
                 <div>
-                  <p class="section-label">Atajos</p>
-                  <h3>Movete rapido por la app</h3>
+                  <p class="section-label">Accesos rápidos</p>
+                  <h3>Ve a lo que necesites</h3>
                 </div>
                 <p class="section-note">
-                  La idea es que no tengas que ver todo a la vez, sino abrir lo que necesites.
+                  Entra directo a tu lista, añade un anime nuevo o abre la ficha del que estás
+                  siguiendo.
                 </p>
               </div>
 
               <div class="quick-actions">
                 <button class="quick-card" type="button" data-jump="library">
-                  <strong>Biblioteca</strong>
-                  <span>Ver y filtrar tus animes</span>
+                  <strong>Mis animes</strong>
+                  <span>Ver y buscar entre tus títulos</span>
                 </button>
                 <button class="quick-card" type="button" data-jump="editor">
-                  <strong>Nuevo anime</strong>
-                  <span>Anadir portada y progreso</span>
+                  <strong>Añadir anime</strong>
+                  <span>Guardar un título nuevo</span>
                 </button>
                 <button class="quick-card" type="button" data-jump="detail">
-                  <strong>Detalle</strong>
-                  <span>Abrir la ficha del seleccionado</span>
+                  <strong>Ficha</strong>
+                  <span>Ver el anime que tienes seleccionado</span>
                 </button>
               </div>
             </article>
@@ -125,10 +126,10 @@
               <div class="section-head">
                 <div>
                   <p class="section-label">Recientes</p>
-                  <h3>Ultimos cambios</h3>
+                  <h3>Últimos cambios</h3>
                 </div>
                 <p class="section-note">
-                  Un vistazo rapido a lo que has editado o anadido hace poco.
+                  Lo más reciente que has añadido o actualizado.
                 </p>
               </div>
 
@@ -140,16 +141,16 @@
         <section class="view panel view-panel" data-view="library" hidden>
           <div class="section-head section-head-inline">
             <div>
-              <p class="section-label">Biblioteca</p>
-              <h2>Tu lista de anime</h2>
+              <p class="section-label">Mis animes</p>
+              <h2>Toda tu lista en un vistazo</h2>
             </div>
-            <p class="section-note">Busca, filtra y abre cada ficha sin perder el orden.</p>
+            <p class="section-note">Busca, filtra y abre cualquier anime con un clic.</p>
           </div>
 
           <div class="toolbar">
             <label class="search-field">
               <span class="sr-only">Buscar anime</span>
-              <input id="searchInput" type="search" placeholder="Buscar titulo, plataforma o notas" />
+              <input id="searchInput" type="search" placeholder="Buscar título, plataforma o notas" />
             </label>
             <select id="filterSelect" aria-label="Filtrar por estado">
               <option value="all">Todos</option>
@@ -164,8 +165,8 @@
             <div id="animeList" class="anime-list"></div>
             <div id="emptyState" class="empty-state">
               <div class="empty-icon">+</div>
-              <h3 id="libraryEmptyTitle">No hay animes guardados</h3>
-              <p id="libraryEmptyText">Empieza creando tu primer registro y veras aqui tu biblioteca personal.</p>
+              <h3 id="libraryEmptyTitle">Todavía no tienes animes guardados</h3>
+              <p id="libraryEmptyText">Añade el primero para empezar a construir tu lista personal.</p>
             </div>
           </div>
         </section>
@@ -173,10 +174,10 @@
         <section class="view panel view-panel" data-view="editor" hidden>
           <div class="section-head section-head-inline">
             <div>
-              <p class="section-label">Editor</p>
-              <h2>Nuevo anime</h2>
+              <p class="section-label">Añadir anime</p>
+              <h2>Agrega un título nuevo</h2>
             </div>
-            <p class="section-note">Edita cualquier campo y se guardara en el archivo al instante.</p>
+            <p class="section-note">Rellena los datos básicos y guarda el anime en tu lista.</p>
           </div>
 
           <div class="editor-grid">
@@ -190,14 +191,14 @@
                 </label>
 
                 <label>
-                  <span>URL de portada</span>
-                  <input
-                    id="imageUrl"
-                    name="imageUrl"
-                    type="url"
-                    placeholder="https://..."
-                  />
-                </label>
+                    <span>Enlace de la portada</span>
+                    <input
+                      id="imageUrl"
+                      name="imageUrl"
+                      type="url"
+                      placeholder="https://..."
+                    />
+                  </label>
 
                 <div class="two-cols">
                   <label>
@@ -205,14 +206,14 @@
                     <input id="season" name="season" type="number" min="1" step="1" value="1" required />
                   </label>
                   <label>
-                    <span>Episodio</span>
+                    <span>Episodio actual</span>
                     <input id="episode" name="episode" type="number" min="0" step="1" value="0" required />
                   </label>
                 </div>
 
                 <div class="two-cols">
                   <label>
-                    <span>Total episodios</span>
+                    <span>Total de episodios</span>
                     <input
                       id="totalEpisodes"
                       name="totalEpisodes"
@@ -223,9 +224,9 @@
                     />
                   </label>
                   <label>
-                    <span>Valoracion</span>
+                    <span>Tu valoración</span>
                     <select id="rating" name="rating">
-                      <option value="0">Sin valorar</option>
+                      <option value="0">Sin valoración</option>
                       <option value="1">1 / 10</option>
                       <option value="2">2 / 10</option>
                       <option value="3">3 / 10</option>
@@ -251,7 +252,7 @@
                     </select>
                   </label>
                   <label>
-                    <span>Plataforma</span>
+                    <span>Plataforma donde lo ves</span>
                     <input id="platform" name="platform" type="text" placeholder="Crunchyroll, Netflix..." />
                   </label>
                 </div>
@@ -262,12 +263,12 @@
                     id="notes"
                     name="notes"
                     rows="5"
-                    placeholder="Apunta algo que quieras recordar sobre este anime."
+                    placeholder="Escribe algo que quieras recordar."
                   ></textarea>
                 </label>
 
                 <div class="form-actions">
-                  <button class="primary-btn" type="submit" id="submitBtn">Guardar anime</button>
+                  <button class="primary-btn" type="submit" id="submitBtn">Guardar</button>
                   <button class="secondary-btn" type="button" id="clearFormBtn">Cancelar</button>
                 </div>
               </form>
@@ -276,21 +277,21 @@
             <aside class="editor-preview panel">
               <div class="section-head">
                 <div>
-                  <p class="section-label">Preview</p>
-                  <h3>Portada y resumen</h3>
+                  <p class="section-label">Vista previa</p>
+                  <h3>Así se verá guardado</h3>
                 </div>
-                <p class="section-note">La imagen se actualiza en vivo mientras escribes la URL.</p>
+                <p class="section-note">La portada cambia mientras escribes el enlace.</p>
               </div>
 
               <div class="preview-cover">
-                <img id="imagePreview" alt="Vista previa de portada" />
+                <img id="imagePreview" alt="Vista previa de la portada" />
               </div>
 
               <div class="preview-meta">
                 <span class="status-chip accent" id="previewStatus">Viendo</span>
-                <h3 id="previewTitle">Nuevo anime</h3>
+                <h3 id="previewTitle">Anime nuevo</h3>
                 <p id="previewSummary">Temporada 1 - Episodio 0</p>
-                <p id="previewPlatform" class="section-note">Sin plataforma</p>
+                <p id="previewPlatform" class="section-note">Aún sin plataforma</p>
               </div>
             </aside>
           </div>
@@ -299,17 +300,17 @@
         <section class="view panel view-panel" data-view="detail" hidden>
           <div class="section-head section-head-inline">
             <div>
-              <p class="section-label">Detalle</p>
-              <h2>Ficha del anime</h2>
+              <p class="section-label">Ficha</p>
+              <h2>Información del anime</h2>
             </div>
-            <p class="section-note">Abre una ficha para verla en grande, editarla o borrarla.</p>
+            <p class="section-note">Aquí puedes verla, cambiarla o borrarla.</p>
           </div>
 
           <div id="detailEmpty" class="empty-state empty-state-large">
-              <div class="empty-icon">+</div>
-            <h3>No has seleccionado ningun anime</h3>
-            <p>Abre una ficha desde la biblioteca para ver la portada, las notas y el progreso.</p>
-            <button class="primary-btn" type="button" data-jump="library">Ir a biblioteca</button>
+            <div class="empty-icon">+</div>
+            <h3>No has seleccionado ningún anime</h3>
+            <p>Elige uno de tu lista para ver la portada, las notas y el progreso.</p>
+            <button class="primary-btn" type="button" data-jump="library">Ver mis animes</button>
           </div>
 
           <article id="detailCard" class="detail-card" hidden>
@@ -343,7 +344,7 @@
 
               <div class="form-actions">
                 <button class="primary-btn" type="button" id="detailEditBtn">Editar</button>
-                <button class="secondary-btn" type="button" id="detailLibraryBtn">Ir a biblioteca</button>
+                <button class="secondary-btn" type="button" id="detailLibraryBtn">Ver lista</button>
                 <button class="ghost-btn danger" type="button" id="detailDeleteBtn">Borrar</button>
               </div>
             </div>
@@ -384,7 +385,7 @@
         </div>
 
         <div class="card-footer">
-          <button type="button" class="icon-btn view-btn">Ver detalle</button>
+          <button type="button" class="icon-btn view-btn">Ver ficha</button>
           <button type="button" class="icon-btn edit-btn">Editar</button>
           <button type="button" class="icon-btn delete-btn">Borrar</button>
         </div>

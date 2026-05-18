@@ -1,10 +1,10 @@
 const API_URL = "/api/animes";
 const STORAGE_KEY = "anime-vault-library-v1";
 const VIEW_NAMES = {
-  overview: "Resumen",
-  library: "Biblioteca",
-  editor: "Editor",
-  detail: "Detalle",
+  overview: "Inicio",
+  library: "Mis animes",
+  editor: "Añadir anime",
+  detail: "Ficha",
 };
 
 const form = document.querySelector("#animeForm");
@@ -120,7 +120,7 @@ function buildFallbackCover(title) {
       <circle cx="610" cy="220" r="130" fill="url(#g)" opacity="0.18" />
       <circle cx="200" cy="770" r="150" fill="url(#g)" opacity="0.1" />
       <text x="72" y="170" fill="#edf3ff" font-family="Segoe UI, Arial, sans-serif" font-size="42" font-weight="800">Anime Vault</text>
-      <text x="72" y="250" fill="#9eabc7" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">No cover</text>
+      <text x="72" y="250" fill="#9eabc7" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Sin portada</text>
       <text x="72" y="860" fill="#edf3ff" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="800">${safeTitle}</text>
     </svg>
   `;
@@ -387,7 +387,7 @@ function clearForm() {
   fields.rating.value = 0;
   fields.status.value = "viendo";
   fields.title.focus();
-  submitBtn.textContent = "Guardar anime";
+  submitBtn.textContent = "Guardar";
   renderEditorPreview();
 }
 
@@ -448,11 +448,11 @@ function renderOverview() {
 
 function renderEditorPreview() {
   const payload = buildFormPayload();
-  bindImage(preview.image, payload.imageUrl, payload.title || "Nuevo anime");
+  bindImage(preview.image, payload.imageUrl, payload.title || "Anime nuevo");
   setStatusPill(preview.status, payload.status);
-  preview.title.textContent = payload.title || "Nuevo anime";
+  preview.title.textContent = payload.title || "Anime nuevo";
   preview.summary.textContent = `Temporada ${payload.season} - Episodio ${payload.episode}`;
-  preview.platform.textContent = payload.platform || "Sin plataforma";
+  preview.platform.textContent = payload.platform || "Aún sin plataforma";
 }
 
 function renderSidebarSelection() {
@@ -460,7 +460,7 @@ function renderSidebarSelection() {
 
   if (!anime) {
     sidebarCurrent.title.textContent = "Sin anime";
-    sidebarCurrent.meta.textContent = "Abre una ficha para fijarla aqui.";
+    sidebarCurrent.meta.textContent = "Abre una ficha para verla aquí.";
     sidebarDetailBtn.disabled = true;
     return;
   }
@@ -490,15 +490,15 @@ function renderLibrary() {
 
   if (visible.length === 0) {
     if (animeLibrary.length === 0) {
-      libraryEmptyTitle.textContent = "No hay animes guardados";
-      libraryEmptyText.textContent = "Empieza creando tu primer registro y veras aqui tu biblioteca personal.";
+      libraryEmptyTitle.textContent = "Todavía no tienes animes guardados";
+      libraryEmptyText.textContent = "Añade el primero para empezar tu lista personal.";
     } else {
-      libraryEmptyTitle.textContent = "No hay coincidencias";
-      libraryEmptyText.textContent = "Prueba con otro nombre o cambia el filtro para ver mas resultados.";
+      libraryEmptyTitle.textContent = "No hay resultados";
+      libraryEmptyText.textContent = "Prueba con otro nombre o quita el filtro para ver más opciones.";
     }
   } else {
-    libraryEmptyTitle.textContent = "No hay animes guardados";
-    libraryEmptyText.textContent = "Empieza creando tu primer registro y veras aqui tu biblioteca personal.";
+    libraryEmptyTitle.textContent = "Todavía no tienes animes guardados";
+    libraryEmptyText.textContent = "Añade el primero para empezar tu lista personal.";
   }
 
   const template = document.querySelector("#animeCardTemplate");
@@ -523,11 +523,11 @@ function renderLibrary() {
     bindImage(cover, anime.imageUrl, anime.title);
     setStatusPill(status, anime.status);
     title.textContent = anime.title;
-    notes.textContent = anime.notes || "Sin notas anadidas.";
+    notes.textContent = anime.notes || "Sin notas añadidas.";
     seasonChip.textContent = `Temporada ${anime.season}`;
     episodeChip.textContent = `Episodio ${anime.episode}`;
-    ratingChip.textContent = anime.rating ? `Valoracion ${anime.rating}/10` : "Sin valorar";
-    platformChip.textContent = anime.platform || "Sin plataforma";
+    ratingChip.textContent = anime.rating ? `Valoración ${anime.rating}/10` : "Sin valoración";
+    platformChip.textContent = anime.platform || "Aún sin plataforma";
 
     const progress = progressValue(anime);
     progressFill.style.width = `${progress}%`;
@@ -572,15 +572,15 @@ function renderDetail() {
   detail.subtitle.textContent = `Temporada ${anime.season} - Episodio ${anime.episode}`;
   detail.season.textContent = `Temporada ${anime.season}`;
   detail.episode.textContent = `Episodio ${anime.episode}`;
-  detail.rating.textContent = anime.rating ? `Valoracion ${anime.rating}/10` : "Sin valorar";
-  detail.platform.textContent = anime.platform || "Sin plataforma";
+  detail.rating.textContent = anime.rating ? `Valoración ${anime.rating}/10` : "Sin valoración";
+  detail.platform.textContent = anime.platform || "Aún sin plataforma";
 
   const progress = progressValue(anime);
   detail.progress.textContent = anime.totalEpisodes
     ? `${progress}% (${anime.episode}/${anime.totalEpisodes})`
     : `${progress}%`;
   detail.progressFill.style.width = `${progress}%`;
-  detail.notes.textContent = anime.notes || "Sin notas anadidas.";
+  detail.notes.textContent = anime.notes || "Sin notas añadidas.";
 }
 
 async function loadAnimeLibrary() {
@@ -658,7 +658,7 @@ async function removeAnime(id) {
   const anime = getAnimeById(id);
   if (!anime) return;
 
-  const confirmed = confirm(`Quieres borrar "${anime.title}" de tu lista?`);
+  const confirmed = confirm(`¿Quieres borrar "${anime.title}" de tu lista?`);
   if (!confirmed) return;
 
   if (backendMode === "api") {
@@ -692,7 +692,7 @@ async function removeAnime(id) {
 }
 
 async function resetAnimeLibrary() {
-  const confirmed = confirm("Quieres borrar toda tu biblioteca de anime?");
+  const confirmed = confirm("¿Quieres borrar toda tu lista de animes?");
   if (!confirmed) return;
 
   if (backendMode === "api") {
@@ -733,7 +733,7 @@ form.addEventListener("submit", async (event) => {
 
     clearForm();
   } catch (error) {
-    alert(error instanceof Error ? error.message : "No se pudo guardar el anime.");
+    alert(error instanceof Error ? error.message : "No se pudo guardar.");
   }
 });
 
@@ -873,5 +873,5 @@ init().catch((error) => {
   animeLibrary = [];
   selectedAnimeId = "";
   renderApp();
-  alert("No se pudo cargar la biblioteca desde el archivo local.");
+  alert("No se pudo cargar tu lista.");
 });
