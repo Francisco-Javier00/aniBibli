@@ -2,7 +2,7 @@ const API_URL = "/api/animes";
 const STORAGE_KEY = "anime-vault-library-v1";
 const VIEW_NAMES = {
   overview: "Inicio",
-  library: "Mis animes",
+  library: "Biblioteca",
   editor: "Añadir anime",
   detail: "Ficha",
 };
@@ -19,6 +19,8 @@ const searchInput = document.querySelector("#searchInput");
 const filterSelect = document.querySelector("#filterSelect");
 const clearFormBtn = document.querySelector("#clearFormBtn");
 const openEditorBtn = document.querySelector("#openEditorBtn");
+const libraryAddBtn = document.querySelector("#libraryAddBtn");
+const libraryDetailBtn = document.querySelector("#libraryDetailBtn");
 const sidebarDetailBtn = document.querySelector("#sidebarDetailBtn");
 const submitBtn = document.querySelector("#submitBtn");
 
@@ -743,9 +745,15 @@ clearFormBtn.addEventListener("click", () => {
 });
 
 openEditorBtn.addEventListener("click", () => {
+  navigate("library");
+});
+
+libraryAddBtn.addEventListener("click", () => {
   selectedAnimeId = selectedAnimeId || getSortedAnime()[0]?.id || "";
   startNewAnime();
 });
+
+libraryDetailBtn.addEventListener("click", () => openDetailForSelected());
 
 sidebarDetailBtn.addEventListener("click", () => openDetailForSelected());
 
@@ -791,20 +799,7 @@ detail.deleteBtn.addEventListener("click", () => {
 
 quickActions.forEach((button) => {
   button.addEventListener("click", () => {
-    const jump = button.dataset.jump;
-    if (jump === "editor") {
-      selectedAnimeId = selectedAnimeId || getSortedAnime()[0]?.id || "";
-      clearForm();
-      navigate("editor");
-      return;
-    }
-
-    if (jump === "detail") {
-      openDetailForSelected();
-      return;
-    }
-
-    navigate(jump || "overview");
+    navigate("library");
   });
 });
 
@@ -812,11 +807,6 @@ navLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
     const view = link.dataset.route || "overview";
-    if (view === "detail") {
-      openDetailForSelected();
-      return;
-    }
-
     navigate(view);
   });
 });

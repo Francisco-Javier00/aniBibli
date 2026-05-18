@@ -27,9 +27,7 @@
 
         <nav class="side-nav" aria-label="Secciones">
           <a class="nav-link" href="#overview" data-route="overview">Inicio</a>
-          <a class="nav-link" href="#library" data-route="library">Mis animes</a>
-          <a class="nav-link" href="#editor" data-route="editor">Añadir anime</a>
-          <a class="nav-link" href="#detail" data-route="detail">Ficha</a>
+          <a class="nav-link" href="#library" data-route="library">Biblioteca</a>
         </nav>
 
         <div class="sidebar-card">
@@ -46,7 +44,7 @@
         </div>
 
         <div class="sidebar-actions">
-          <button class="primary-btn" type="button" id="openEditorBtn">Añadir anime</button>
+          <button class="primary-btn" type="button" id="openEditorBtn">Ir a la biblioteca</button>
         </div>
       </aside>
 
@@ -55,10 +53,10 @@
           <header class="hero panel">
             <div class="hero-copy">
               <span class="eyebrow">Empieza aquí</span>
-              <h2>Todo tu anime, claro y ordenado.</h2>
+              <h2>Tu lista de anime, siempre a mano.</h2>
               <p class="lead">
-                Consulta tu lista, revisa en qué episodio vas y añade o cambia información cuando
-                quieras. Todo queda guardado para que lo tengas siempre a mano.
+                Guarda lo que estás viendo, mira por dónde vas y actualiza cada anime cuando lo
+                necesites.
               </p>
 
               <div class="status-strip">
@@ -69,7 +67,6 @@
 
               <div class="hero-actions">
                 <a class="primary-btn" href="#library">Ver mis animes</a>
-                <a class="secondary-btn" href="#editor">Añadir anime</a>
               </div>
             </div>
 
@@ -101,23 +98,22 @@
                   <h3>Ve a lo que necesites</h3>
                 </div>
                 <p class="section-note">
-                  Entra directo a tu lista, añade un anime nuevo o abre la ficha del que estás
-                  siguiendo.
+                  Entra directo a tu lista para añadir un anime o abrir su ficha desde ahí.
                 </p>
               </div>
 
               <div class="quick-actions">
                 <button class="quick-card" type="button" data-jump="library">
-                  <strong>Mis animes</strong>
-                  <span>Ver y buscar entre tus títulos</span>
+                  <strong>Ir a la biblioteca</strong>
+                  <span>Ver la lista completa</span>
                 </button>
-                <button class="quick-card" type="button" data-jump="editor">
-                  <strong>Añadir anime</strong>
-                  <span>Guardar un título nuevo</span>
+                <button class="quick-card" type="button" data-jump="library" data-action="add">
+                  <strong>Añadir desde la lista</strong>
+                  <span>Empezar un registro nuevo</span>
                 </button>
-                <button class="quick-card" type="button" data-jump="detail">
-                  <strong>Ficha</strong>
-                  <span>Ver el anime que tienes seleccionado</span>
+                <button class="quick-card" type="button" data-jump="library" data-action="detail">
+                  <strong>Ver ficha</strong>
+                  <span>Abrir el anime seleccionado</span>
                 </button>
               </div>
             </article>
@@ -144,7 +140,12 @@
               <p class="section-label">Mis animes</p>
               <h2>Toda tu lista en un vistazo</h2>
             </div>
-            <p class="section-note">Busca, filtra y abre cualquier anime con un clic.</p>
+            <p class="section-note">Busca, filtra y desde aquí abre o añade cualquier anime.</p>
+          </div>
+
+          <div class="toolbar library-actions">
+            <button class="primary-btn" type="button" id="libraryAddBtn">Añadir anime</button>
+            <button class="secondary-btn" type="button" id="libraryDetailBtn">Ver ficha</button>
           </div>
 
           <div class="toolbar">
@@ -310,7 +311,7 @@
             <div class="empty-icon">+</div>
             <h3>No has seleccionado ningún anime</h3>
             <p>Elige uno de tu lista para ver la portada, las notas y el progreso.</p>
-            <button class="primary-btn" type="button" data-jump="library">Ver mis animes</button>
+            <button class="primary-btn" type="button" data-jump="library">Volver a la lista</button>
           </div>
 
           <article id="detailCard" class="detail-card" hidden>
@@ -344,7 +345,7 @@
 
               <div class="form-actions">
                 <button class="primary-btn" type="button" id="detailEditBtn">Editar</button>
-                <button class="secondary-btn" type="button" id="detailLibraryBtn">Ver lista</button>
+                <button class="secondary-btn" type="button" id="detailLibraryBtn">Volver a la lista</button>
                 <button class="ghost-btn danger" type="button" id="detailDeleteBtn">Borrar</button>
               </div>
             </div>
