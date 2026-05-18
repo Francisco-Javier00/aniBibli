@@ -1,0 +1,30 @@
+[
+  {
+    "id": "c19410f4-5450-4a85-8595-8e93bd411a2e",
+    "title": "Black Clover",
+    "season": 1,
+    "episode": 170,
+    "totalEpisodes": 170,
+    "rating": 10,
+    "status": "completado",
+    "platform": "Crunchy",
+    "notes": "",
+    "imageUrl": "https://m.media-amazon.com/images/M/MV5BZmZkZjNhMWMtM2U0Mi00MjdlLTk3NmMtMTMwZjgwOTJmODMzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    "createdAt": 1779118005090,
+    "updatedAt": 1779118005094
+  },
+  {
+    "id": "e020caec-b74f-4ad8-ade3-6696797a2ea4",
+    "title": "Gals Can't be Kind to Otaku!?",
+    "season": 1,
+    "episode": 5,
+    "totalEpisodes": 12,
+    "rating": 10,
+    "status": "viendo",
+    "platform": "Crunchy",
+    "notes": "",
+    "imageUrl": "https://m.media-amazon.com/images/M/MV5BYWExMTFiOTAtMDcyNy00YmI0LTljODYtOGZjMTQ4ODJjYTJmXkEyXkFqcGc@._V1_.jpg",
+    "createdAt": 1779117558565,
+    "updatedAt": 1779117558569
+  }
+]

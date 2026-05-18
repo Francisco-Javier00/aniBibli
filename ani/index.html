@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Anime Vault, tu biblioteca personal para guardar anime, temporadas, episodios y portadas en un archivo local."
+    />
+    <title>Anime Vault</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="mesh mesh-a"></div>
+    <div class="mesh mesh-b"></div>
+    <div class="mesh mesh-c"></div>
+
+    <div class="app-shell">
+      <aside class="sidebar panel">
+        <div class="brand">
+          <span class="eyebrow">Anime tracker personal</span>
+          <h1>Anime Vault</h1>
+          <p class="brand-copy">
+            Una biblioteca viva para guardar lo que ves, con portadas, progreso y notas.
+          </p>
+        </div>
+
+        <nav class="side-nav" aria-label="Secciones">
+          <a class="nav-link" href="#overview" data-route="overview">Resumen</a>
+          <a class="nav-link" href="#library" data-route="library">Biblioteca</a>
+          <a class="nav-link" href="#editor" data-route="editor">Editor</a>
+          <a class="nav-link" href="#detail" data-route="detail">Detalle</a>
+        </nav>
+
+        <div class="sidebar-card">
+          <span class="sidebar-label">Guardado local</span>
+          <strong>data/animes.json</strong>
+          <p>Todo se escribe en archivo para que puedas editarlo y mantenerlo siempre a mano.</p>
+        </div>
+
+        <div class="sidebar-card sidebar-current">
+          <span class="sidebar-label">Seleccion actual</span>
+          <strong id="sidebarCurrentTitle">Sin anime</strong>
+          <p id="sidebarCurrentMeta">Abre una ficha para fijarla aqui.</p>
+          <button class="secondary-btn" type="button" id="sidebarDetailBtn">Abrir detalle</button>
+        </div>
+
+        <div class="sidebar-actions">
+          <button class="primary-btn" type="button" id="openEditorBtn">Nuevo anime</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="view" data-view="overview">
+          <header class="hero panel">
+            <div class="hero-copy">
+              <span class="eyebrow">Dashboard anime</span>
+              <h2>Tu seguimiento, pero con estilo.</h2>
+              <p class="lead">
+                Salta entre vistas, mira tus portadas, edita tu progreso y guarda cada cambio en
+                el archivo local sin depender del navegador.
+              </p>
+
+              <div class="status-strip">
+                <span class="status-chip accent">Guardado en archivo</span>
+                <span class="status-chip">Sidebar + vistas</span>
+                <span class="status-chip">Portadas por URL</span>
+              </div>
+
+              <div class="hero-actions">
+                <a class="primary-btn" href="#library">Ir a biblioteca</a>
+                <a class="secondary-btn" href="#editor">Crear anime</a>
+              </div>
+            </div>
+
+            <section class="stats-grid">
+              <article class="stat-card stat-card-main">
+                <span>Total</span>
+                <strong id="animeCount">0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Viendo</span>
+                <strong id="watchingCount">0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Completados</span>
+                <strong id="completedCount">0</strong>
+              </article>
+              <article class="stat-card">
+                <span>Episodios vistos</span>
+                <strong id="episodesCount">0</strong>
+              </article>
+            </section>
+          </header>
+
+          <div class="overview-grid">
+            <article class="panel section-card">
+              <div class="section-head">
+                <div>
+                  <p class="section-label">Atajos</p>
+                  <h3>Movete rapido por la app</h3>
+                </div>
+                <p class="section-note">
+                  La idea es que no tengas que ver todo a la vez, sino abrir lo que necesites.
+                </p>
+              </div>
+
+              <div class="quick-actions">
+                <button class="quick-card" type="button" data-jump="library">
+                  <strong>Biblioteca</strong>
+                  <span>Ver y filtrar tus animes</span>
+                </button>
+                <button class="quick-card" type="button" data-jump="editor">
+                  <strong>Nuevo anime</strong>
+                  <span>Anadir portada y progreso</span>
+                </button>
+                <button class="quick-card" type="button" data-jump="detail">
+                  <strong>Detalle</strong>
+                  <span>Abrir la ficha del seleccionado</span>
+                </button>
+              </div>
+            </article>
+
+            <article class="panel section-card">
+              <div class="section-head">
+                <div>
+                  <p class="section-label">Recientes</p>
+                  <h3>Ultimos cambios</h3>
+                </div>
+                <p class="section-note">
+                  Un vistazo rapido a lo que has editado o anadido hace poco.
+                </p>
+              </div>
+
+              <div id="recentList" class="recent-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view panel view-panel" data-view="library" hidden>
+          <div class="section-head section-head-inline">
+            <div>
+              <p class="section-label">Biblioteca</p>
+              <h2>Tu lista de anime</h2>
+            </div>
+            <p class="section-note">Busca, filtra y abre cada ficha sin perder el orden.</p>
+          </div>
+
+          <div class="toolbar">
+            <label class="search-field">
+              <span class="sr-only">Buscar anime</span>
+              <input id="searchInput" type="search" placeholder="Buscar titulo, plataforma o notas" />
+            </label>
+            <select id="filterSelect" aria-label="Filtrar por estado">
+              <option value="all">Todos</option>
+              <option value="viendo">Viendo</option>
+              <option value="pausado">Pausado</option>
+              <option value="completado">Completado</option>
+              <option value="pendiente">Pendiente</option>
+            </select>
+          </div>
+
+          <div class="collection-body">
+            <div id="animeList" class="anime-list"></div>
+            <div id="emptyState" class="empty-state">
+              <div class="empty-icon">+</div>
+              <h3 id="libraryEmptyTitle">No hay animes guardados</h3>
+              <p id="libraryEmptyText">Empieza creando tu primer registro y veras aqui tu biblioteca personal.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="view panel view-panel" data-view="editor" hidden>
+          <div class="section-head section-head-inline">
+            <div>
+              <p class="section-label">Editor</p>
+              <h2>Nuevo anime</h2>
+            </div>
+            <p class="section-note">Edita cualquier campo y se guardara en el archivo al instante.</p>
+          </div>
+
+          <div class="editor-grid">
+            <div class="editor-form">
+              <form id="animeForm" class="anime-form">
+                <input type="hidden" id="animeId" />
+
+                <label>
+                  <span>Titulo</span>
+                  <input id="title" name="title" type="text" placeholder="Ej. Jujutsu Kaisen" required />
+                </label>
+
+                <label>
+                  <span>URL de portada</span>
+                  <input
+                    id="imageUrl"
+                    name="imageUrl"
+                    type="url"
+                    placeholder="https://..."
+                  />
+                </label>
+
+                <div class="two-cols">
+                  <label>
+                    <span>Temporada</span>
+                    <input id="season" name="season" type="number" min="1" step="1" value="1" required />
+                  </label>
+                  <label>
+                    <span>Episodio</span>
+                    <input id="episode" name="episode" type="number" min="0" step="1" value="0" required />
+                  </label>
+                </div>
+
+                <div class="two-cols">
+                  <label>
+                    <span>Total episodios</span>
+                    <input
+                      id="totalEpisodes"
+                      name="totalEpisodes"
+                      type="number"
+                      min="0"
+                      step="1"
+                      value="0"
+                    />
+                  </label>
+                  <label>
+                    <span>Valoracion</span>
+                    <select id="rating" name="rating">
+                      <option value="0">Sin valorar</option>
+                      <option value="1">1 / 10</option>
+                      <option value="2">2 / 10</option>
+                      <option value="3">3 / 10</option>
+                      <option value="4">4 / 10</option>
+                      <option value="5">5 / 10</option>
+                      <option value="6">6 / 10</option>
+                      <option value="7">7 / 10</option>
+                      <option value="8">8 / 10</option>
+                      <option value="9">9 / 10</option>
+                      <option value="10">10 / 10</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="two-cols">
+                  <label>
+                    <span>Estado</span>
+                    <select id="status" name="status">
+                      <option value="viendo">Viendo</option>
+                      <option value="pausado">Pausado</option>
+                      <option value="completado">Completado</option>
+                      <option value="pendiente">Pendiente</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Plataforma</span>
+                    <input id="platform" name="platform" type="text" placeholder="Crunchyroll, Netflix..." />
+                  </label>
+                </div>
+
+                <label>
+                  <span>Notas</span>
+                  <textarea
+                    id="notes"
+                    name="notes"
+                    rows="5"
+                    placeholder="Apunta algo que quieras recordar sobre este anime."
+                  ></textarea>
+                </label>
+
+                <div class="form-actions">
+                  <button class="primary-btn" type="submit" id="submitBtn">Guardar anime</button>
+                  <button class="secondary-btn" type="button" id="clearFormBtn">Cancelar</button>
+                </div>
+              </form>
+            </div>
+
+            <aside class="editor-preview panel">
+              <div class="section-head">
+                <div>
+                  <p class="section-label">Preview</p>
+                  <h3>Portada y resumen</h3>
+                </div>
+                <p class="section-note">La imagen se actualiza en vivo mientras escribes la URL.</p>
+              </div>
+
+              <div class="preview-cover">
+                <img id="imagePreview" alt="Vista previa de portada" />
+              </div>
+
+              <div class="preview-meta">
+                <span class="status-chip accent" id="previewStatus">Viendo</span>
+                <h3 id="previewTitle">Nuevo anime</h3>
+                <p id="previewSummary">Temporada 1 - Episodio 0</p>
+                <p id="previewPlatform" class="section-note">Sin plataforma</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view panel view-panel" data-view="detail" hidden>
+          <div class="section-head section-head-inline">
+            <div>
+              <p class="section-label">Detalle</p>
+              <h2>Ficha del anime</h2>
+            </div>
+            <p class="section-note">Abre una ficha para verla en grande, editarla o borrarla.</p>
+          </div>
+
+          <div id="detailEmpty" class="empty-state empty-state-large">
+              <div class="empty-icon">+</div>
+            <h3>No has seleccionado ningun anime</h3>
+            <p>Abre una ficha desde la biblioteca para ver la portada, las notas y el progreso.</p>
+            <button class="primary-btn" type="button" data-jump="library">Ir a biblioteca</button>
+          </div>
+
+          <article id="detailCard" class="detail-card" hidden>
+            <div class="detail-cover">
+              <img id="detailImage" alt="Portada del anime" />
+            </div>
+
+            <div class="detail-copy">
+              <span class="status-pill" id="detailStatus">Viendo</span>
+              <h3 id="detailTitle">Anime</h3>
+              <p id="detailSubtitle" class="detail-subtitle"></p>
+
+              <div class="anime-meta">
+                <span class="meta-chip" id="detailSeason"></span>
+                <span class="meta-chip" id="detailEpisode"></span>
+                <span class="meta-chip" id="detailRating"></span>
+                <span class="meta-chip" id="detailPlatform"></span>
+              </div>
+
+              <div class="progress-block">
+                <div class="progress-top">
+                  <span>Progreso</span>
+                  <span id="detailProgress" class="progress-value"></span>
+                </div>
+                <div class="progress-track">
+                  <span id="detailProgressFill" class="progress-fill"></span>
+                </div>
+              </div>
+
+              <p id="detailNotes" class="anime-notes"></p>
+
+              <div class="form-actions">
+                <button class="primary-btn" type="button" id="detailEditBtn">Editar</button>
+                <button class="secondary-btn" type="button" id="detailLibraryBtn">Ir a biblioteca</button>
+                <button class="ghost-btn danger" type="button" id="detailDeleteBtn">Borrar</button>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <template id="animeCardTemplate">
+      <article class="anime-card">
+        <div class="card-accent"></div>
+        <div class="anime-card-top">
+          <div class="card-cover-wrap">
+            <img class="card-cover" alt="" />
+          </div>
+          <div class="anime-card-main">
+            <span class="status-pill"></span>
+            <h3 class="anime-title"></h3>
+            <p class="anime-notes"></p>
+
+            <div class="anime-meta">
+              <span class="meta-chip season-chip"></span>
+              <span class="meta-chip episode-chip"></span>
+              <span class="meta-chip rating-chip"></span>
+              <span class="meta-chip platform-chip"></span>
+            </div>
+
+            <div class="progress-block">
+              <div class="progress-top">
+                <span>Progreso</span>
+                <span class="progress-value"></span>
+              </div>
+              <div class="progress-track">
+                <span class="progress-fill"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button type="button" class="icon-btn view-btn">Ver detalle</button>
+          <button type="button" class="icon-btn edit-btn">Editar</button>
+          <button type="button" class="icon-btn delete-btn">Borrar</button>
+        </div>
+      </article>
+    </template>
+
+    <template id="recentItemTemplate">
+      <button type="button" class="recent-item">
+        <img class="recent-cover" alt="" />
+        <div class="recent-copy">
+          <strong class="recent-title"></strong>
+          <span class="recent-meta"></span>
+        </div>
+      </button>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
