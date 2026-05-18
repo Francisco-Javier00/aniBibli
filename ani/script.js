@@ -745,7 +745,8 @@ clearFormBtn.addEventListener("click", () => {
 });
 
 openEditorBtn.addEventListener("click", () => {
-  navigate("library");
+  selectedAnimeId = selectedAnimeId || getSortedAnime()[0]?.id || "";
+  startNewAnime();
 });
 
 libraryAddBtn.addEventListener("click", () => {
