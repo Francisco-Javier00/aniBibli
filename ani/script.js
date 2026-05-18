@@ -1,4 +1,5 @@
 const API_URL = "/api/animes";
+const STORAGE_KEY = "anime-vault-library-v1";
 const VIEW_NAMES = {
   overview: "Resumen",
   library: "Biblioteca",
@@ -79,6 +80,7 @@ let animeLibrary = [];
 let currentView = "overview";
 let selectedAnimeId = "";
 let editingId = "";
+let backendMode = "api";
 
 function formatCount(value) {
   return Number(value || 0).toLocaleString("es-ES");
@@ -229,6 +231,68 @@ async function requestJson(url, options = {}) {
   }
 
   return payload;
+}
+
+function readLocalLibrary() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.map(normalizeAnime) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalLibrary(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items, null, 2));
+}
+
+function saveAnimeLocally(payload, id = "") {
+  const now = Date.now();
+  const item = normalizeAnime({
+    ...payload,
+    id: id || globalThis.crypto?.randomUUID?.() || `${now}-${Math.random().toString(16).slice(2)}`,
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  const next = [item, ...animeLibrary.filter((anime) => anime.id !== item.id)];
+  animeLibrary = next;
+  writeLocalLibrary(next);
+  selectedAnimeId = item.id;
+  return item;
+}
+
+function updateAnimeLocally(id, payload) {
+  const index = animeLibrary.findIndex((anime) => anime.id === id);
+  if (index === -1) {
+    throw new Error("Anime not found");
+  }
+
+  const item = normalizeAnime({
+    ...animeLibrary[index],
+    ...payload,
+    id,
+    updatedAt: Date.now(),
+  });
+  const next = [...animeLibrary];
+  next[index] = item;
+  animeLibrary = next;
+  writeLocalLibrary(next);
+  selectedAnimeId = item.id;
+  return item;
+}
+
+function deleteAnimeLocally(id) {
+  const next = animeLibrary.filter((anime) => anime.id !== id);
+  animeLibrary = next;
+  writeLocalLibrary(next);
+}
+
+function clearAnimeLocally() {
+  animeLibrary = [];
+  selectedAnimeId = "";
+  writeLocalLibrary([]);
 }
 
 function getAnimeById(id) {
@@ -520,8 +584,14 @@ function renderDetail() {
 }
 
 async function loadAnimeLibrary() {
-  const payload = await requestJson(API_URL);
-  animeLibrary = Array.isArray(payload?.items) ? payload.items.map(normalizeAnime) : [];
+  try {
+    const payload = await requestJson(API_URL);
+    backendMode = "api";
+    animeLibrary = Array.isArray(payload?.items) ? payload.items.map(normalizeAnime) : [];
+  } catch {
+    backendMode = "local";
+    animeLibrary = readLocalLibrary();
+  }
   ensureSelection();
   renderApp();
 }
@@ -537,26 +607,50 @@ function renderApp() {
 }
 
 async function createAnime(payload) {
-  const response = await requestJson(API_URL, {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  if (backendMode === "api") {
+    try {
+      const response = await requestJson(API_URL, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
 
-  const saved = normalizeAnime(response.item);
-  selectedAnimeId = saved.id;
-  await loadAnimeLibrary();
+      const saved = normalizeAnime(response.item);
+      selectedAnimeId = saved.id;
+      await loadAnimeLibrary();
+      navigate("detail", saved.id);
+      return;
+    } catch {
+      backendMode = "local";
+    }
+  }
+
+  const saved = saveAnimeLocally(payload);
+  ensureSelection();
+  renderApp();
   navigate("detail", saved.id);
 }
 
 async function updateAnime(id, payload) {
-  const response = await requestJson(`${API_URL}/${encodeURIComponent(id)}`, {
-    method: "PUT",
-    body: JSON.stringify(payload),
-  });
+  if (backendMode === "api") {
+    try {
+      const response = await requestJson(`${API_URL}/${encodeURIComponent(id)}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
 
-  const saved = normalizeAnime(response.item);
-  selectedAnimeId = saved.id;
-  await loadAnimeLibrary();
+      const saved = normalizeAnime(response.item);
+      selectedAnimeId = saved.id;
+      await loadAnimeLibrary();
+      navigate("detail", saved.id);
+      return;
+    } catch {
+      backendMode = "local";
+    }
+  }
+
+  const saved = updateAnimeLocally(id, payload);
+  ensureSelection();
+  renderApp();
   navigate("detail", saved.id);
 }
 
@@ -567,9 +661,15 @@ async function removeAnime(id) {
   const confirmed = confirm(`Quieres borrar "${anime.title}" de tu lista?`);
   if (!confirmed) return;
 
-  await requestJson(`${API_URL}/${encodeURIComponent(id)}`, {
-    method: "DELETE",
-  });
+  if (backendMode === "api") {
+    try {
+      await requestJson(`${API_URL}/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+    } catch {
+      backendMode = "local";
+    }
+  }
 
   if (selectedAnimeId === id) {
     selectedAnimeId = "";
@@ -577,6 +677,12 @@ async function removeAnime(id) {
 
   if (editingId === id) {
     clearForm();
+  }
+
+  if (backendMode === "local") {
+    deleteAnimeLocally(id);
+    renderApp();
+    return;
   }
 
   await loadAnimeLibrary();
@@ -589,9 +695,20 @@ async function resetAnimeLibrary() {
   const confirmed = confirm("Quieres borrar toda tu biblioteca de anime?");
   if (!confirmed) return;
 
-  await requestJson(API_URL, { method: "DELETE" });
-  animeLibrary = [];
-  selectedAnimeId = "";
+  if (backendMode === "api") {
+    try {
+      await requestJson(API_URL, { method: "DELETE" });
+      animeLibrary = [];
+      selectedAnimeId = "";
+      clearForm();
+      renderApp();
+      return;
+    } catch {
+      backendMode = "local";
+    }
+  }
+
+  clearAnimeLocally();
   clearForm();
   renderApp();
 }
